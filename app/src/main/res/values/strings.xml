@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">微信插件</string>
+    <string name="menu_settings">Settings</string>
+    <string name="action_settings">Settings</string>
+    <string name="servicelable">微信插件</string>
+    <string name="description">自动进入丁香医生特定页面</string>
+</resources>

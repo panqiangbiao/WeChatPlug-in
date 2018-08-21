@@ -1,0 +1,375 @@
+package com.example.qbpan.helloworld;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import android.accessibilityservice.AccessibilityService;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.util.Log;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.Toast;
+
+import java.lang.Boolean;
+
+/**
+ * @author 作者 YYD
+ * @version 创建时间：2016年12月14日 下午2:46:49
+ * @function 未添加
+ */
+public class RobService extends AccessibilityService {
+    /**
+     * 此方法用来接收我的需要的各种事件 在accessibility.xml中我们监听了以下事件：
+     * typeNotificationStateChanged typeWindowStateChanged
+     * typeWindowContentChanged
+     * http://www.jianshu.com/p/ba298b8d5a6e  看看这个是否被拆了判断
+     */
+    @Override
+    /*
+    public void onAccessibilityEvent(AccessibilityEvent event) {
+        int eventType = event.getEventType();
+        switch (eventType) {
+            // 当通知栏发生改变的时候
+            case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
+                Log.v("serv1", "TYPE_NOTIFICATION_STATE_CHANGED");
+                List<CharSequence> texts = event.getText();
+                if (!texts.isEmpty()) {
+                    for (CharSequence text : texts) {
+                        String content = text.toString();
+                        Log.v("Noti", content);
+                        if (content.contains("[微信红包]")) {
+                            if ((event.getParcelableData() != null)
+                                    && (event.getParcelableData() instanceof Notification)) {
+                                Notification notification = (Notification) event
+                                        .getParcelableData();
+                                PendingIntent pendingIntent = notification.contentIntent;
+                                try {
+                                    pendingIntent.send();
+                                } catch (Exception e) {
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            // 当窗口内容发生改变的时候
+            case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
+
+                break;
+            // 当窗口状态发生改变的时候
+            case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
+                String className = event.getClassName().toString();
+                if (className.equals("com.tencent.mm.ui.LauncherUI")) { //聊天页
+                    inputTextClick("Open");
+//              getLastPacket();//注释的原因我在方法中写明了，如果放开这个方法就会出现死循环，大家可以尝试一下。
+//              inputClick("com.tencent.mm:id/fz");//这条语句是聊天页面返回键的id,放不放开都没用。
+                } else if (className  //拆红包页,点击“开”，抢红包
+                        .equals("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI")) {
+                    //inputTextClick("Open");
+                } else if (className //红包详情页，点击返回键
+                        .equals("com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyDetailUI")) {
+                    inputClick("com.tencent.mm:id/gd");
+                }
+                break;
+        }
+    }*/
+    public void onAccessibilityEvent(AccessibilityEvent event) {
+        int eventType = event.getEventType();
+        switch (eventType) {
+            // 当通知栏发生改变的时候
+            case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
+                Log.v("serv1", "TYPE_NOTIFICATION_STATE_CHANGED");
+                List<CharSequence> texts = event.getText();
+                if (!texts.isEmpty()) {
+                    for (CharSequence text : texts) {
+                        String content = text.toString();
+                        //Log.v("Noti", content);
+                        if (content.contains("潘强标")) {
+                            if ((event.getParcelableData() != null)
+                                    && (event.getParcelableData() instanceof Notification)) {
+                                Notification notification = (Notification) event
+                                        .getParcelableData();
+                                PendingIntent pendingIntent = notification.contentIntent;
+                                try {
+                                    pendingIntent.send();
+                                } catch (Exception e) {
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            // 当窗口内容发生改变的时候
+            case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
+
+                break;
+            // 当窗口状态发生改变的时候
+            case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
+                String className = event.getClassName().toString();
+                if (className.equals("com.tencent.mm.ui.LauncherUI")) { //聊天页
+                    Log.v("STATE_CHANGE","LauncherUI");
+                    //inputTextClick("WeChat Team");
+                    //Log.v("STATE_CHANGE","Details");
+                    //Toast.makeText(RobService.this, "Details", Toast.LENGTH_SHORT).show();
+                    //inputTextClick("安全登录提醒");
+                    //inputClick("com.tencent.mm:id/a8");
+                    //inputClick("com.tencent.mm:id/z7");
+                    inputTextClick("尝试登录");
+              //getLastPacket();//注释的原因我在方法中写明了，如果放开这个方法就会出现死循环，大家可以尝试一下。
+//              inputClick("com.tencent.mm:id/fz");//这条语句是聊天页面返回键的id,放不放开都没用。
+                }
+
+                break;
+        }
+    }
+
+
+    /**
+     * 这个方法有缺陷。要是能加 过滤已拆红包就好了。我实在想不出好的办法所以注释掉了。
+     * 如果大家有好的过滤方案，请告诉我一声，不胜感激！这是我的一个遗憾
+     * 因为这一行注释掉，就不是我们想要的全自动的抢红包了。
+     */
+    private void getLastPacket() {
+        AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
+        Log.v("STATE_CHANGE","getLastPacket");
+        recycle(nodeInfo);
+        if (parents.size() > 0) {
+            parents.get(parents.size() - 1).performAction(
+                    AccessibilityNodeInfo.ACTION_CLICK);
+        }
+
+    }
+
+
+    ArrayList<AccessibilityNodeInfo> parents = new ArrayList<AccessibilityNodeInfo>();
+    /**
+     * 这个方法是用递归的方式，遍历节点树。
+     * 如果找到“领取红包”和“查看红包”所在叶子节点，就用while不断的找自己父节点，这个父节点要求可以被点击。（也是是说找最近一个可以点击的父节点）
+     */
+    private void recycle(AccessibilityNodeInfo info) {
+        Log.v("STATE_CHANGE","recycle");
+        LinkedList<AccessibilityNodeInfo> list = new LinkedList<>();
+        if (info.getChildCount() == 0) {
+            Log.v("STATE_CHANGE","info.getChildCount() == 0  " + info.getText().toString());
+            if (info.getText() != null) {
+                if ("潘强标".equals(info.getText().toString())
+                        ||"查看红包".equals(info.getText().toString())
+                        ||"Details".equals(info.getText().toString())
+                        ||"安全登录提醒".equals(info.getText().toString()
+                )) {
+                    if (info.isClickable()) {
+                        Log.v("STATE_CHANGE","info.isClickable()");
+                        info.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    }
+                    AccessibilityNodeInfo parent = info.getParent();
+                    while (parent != null) {
+                        if (parent.isClickable()) {
+                            Log.v("STATE_CHANGE","while info.isClickable()");
+                            parents.add(parent);//找到了添加到列表并推出循环，否则继续往上找父节点。
+                            break;
+                        }
+                        parent = parent.getParent();
+                    }
+                }
+            }
+        } else {
+            Log.v("STATE_CHANGE","for total:" + info.getChildCount());
+            for (int i = 0; i < info.getChildCount(); i++) {
+                Log.v("STATE_CHANGE","for :"+ i);
+                if (info.getChild(i) != null) {
+                    //recycle2(info.getChild(i),0);
+                    treeTraverse(info.getChild(i),0,list);
+                }
+            }
+            /*
+            Log.v("STATE_CHANGE","find what we want ,cnt:" + list.size());
+            while(!list.isEmpty()) {
+                AccessibilityNodeInfo info3 = list.pollLast();
+                info3 = list.pollLast();
+                Log.v("STATE_CHANGE","find what we want ,name :" + info3.getClassName());
+
+
+                if(treeTraverse(info3,0))
+                {
+                    info3.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                    return ;
+                }
+            }*/
+        }
+    }
+    private void recycle2(AccessibilityNodeInfo info,int layer) {
+        Log.v("STATE_CHANGE", "recycle " + layer );
+        Log.v("STATE_CHANGE", "info.getChildCount() : " + info.getChildCount()
+                +" Class name :" + info.getClassName()
+                + " text :"  + info.getText()
+                + " res :"  + info.getViewIdResourceName()
+                + " chick :"  + info.isClickable()
+        );
+        if(info.getClassName().equals("android.widget.LinearLayout" ) &&  info.isClickable())
+        {
+            //info.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+        }
+        if (info.getChildCount() !=0) {
+            for (int i = 0; i < info.getChildCount(); i++)
+                recycle2(info.getChild(i),layer + 1 );
+        }
+    }
+
+    public void treeTraverse(AccessibilityNodeInfo info,int layer , LinkedList<AccessibilityNodeInfo> list)
+    {
+        Log.v("STATE_CHANGE", "treeTraverse " + layer );
+        Log.v("STATE_CHANGE", "info.getChildCount() : " + info.getChildCount()
+                +" Class name :" + info.getClassName()
+                + " text :"  + info.getText()
+                + " res :"  + info.getViewIdResourceName()
+                + " chick :"  + info.isClickable()
+        );
+        //list <AccessibilityNodeInfo> = new List;
+        //List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText(text);
+        //if(info.getClassName().equals("android.widget.LinearLayout" ) &&  info.isClickable())
+        /*
+        if(info.getClassName().equals("android.widget.RelativeLayout" ) &&  info.isClickable())
+        {
+            info.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+        }
+        //use to get the content in the list
+        if(info.getClassName().equals(RelativeLayout))
+        {
+            list.add(info);
+            Log.v("STATE_CHANGE", "get Relative " + layer );
+        }*/
+        if(match(info)) {
+            /*
+            Log.v("STATE_CHANGE", "matching "
+                    +" Class name :" + info.getClassName()
+                    + " text :"  + info.getText()
+                    + " res :"  + info.getViewIdResourceName()
+                    + " click :"  + info.isClickable()
+                    +" parent Class name :" + info.getParent().getClassName()
+                    + " parent click :"  + info.getParent().isClickable()
+            );
+            */
+            //info.getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
+        }
+
+        if(info.getChildCount() !=0)
+        {
+            for(int i = 0; i < info.getChildCount(); i ++)
+            {
+                treeTraverse(info.getChild(i),layer + 1, list);
+            }
+
+        }
+    }
+
+    public Boolean treeTraverse(AccessibilityNodeInfo info,int layer)
+    {
+        Log.v("STATE_CHANGE", "treeTraverse " + layer );
+        Log.v("STATE_CHANGE", "info.getChildCount() : " + info.getChildCount()
+                +" Class name :" + info.getClassName()
+                + " text :"  + info.getText()
+                + " res :"  + info.getViewIdResourceName()
+                + " chick :"  + info.isClickable()
+        );
+        //list <AccessibilityNodeInfo> = new List;
+        //List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText(text);
+
+        //traverse the content to match
+        Boolean bool = match(info);
+        Log.v("STATE_CHANGE", "match " + layer );
+        if (bool == true)
+            return bool;
+
+        if(info.getChildCount() !=0)
+        {
+            for(int i = 0; i < info.getChildCount() && bool == false; i ++)
+            {
+                bool = treeTraverse(info.getChild(i),i+1);
+
+            }
+        }
+        return bool;
+    }
+
+    @Override
+    public void onInterrupt() {
+
+    }
+
+    @Override
+    protected void onServiceConnected() {
+        super.onServiceConnected();
+        Toast.makeText(RobService.this, "成功与微信绑定，开始监听", Toast.LENGTH_SHORT)
+                .show();
+    }
+    /**
+     * 根据id,获取AccessibilityNodeInfo，并点击。
+     */
+    private void inputClick(String clickId) {
+        AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
+        if(nodeInfo == null)
+        {
+            Log.v("STATE_CHANGE","NULL");
+            Toast.makeText(RobService.this, "None", Toast.LENGTH_SHORT).show();
+        }
+        if (nodeInfo != null) {
+            List<AccessibilityNodeInfo> list = nodeInfo
+                    .findAccessibilityNodeInfosByViewId(clickId);
+            Toast.makeText(RobService.this, "Action", Toast.LENGTH_SHORT).show();
+            for (AccessibilityNodeInfo item : list) {
+                Toast.makeText(RobService.this, "Action2", Toast.LENGTH_SHORT).show();
+                item.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            }
+        }
+    }
+    private void inputTextClick(String text) {
+        AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
+        Log.v("STATE_CHANGE","Action");
+
+        if (nodeInfo != null) {
+            List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText(text);
+            for (AccessibilityNodeInfo item : list) {
+                Log.v("STATE_CHANGE","Action :" +  item.getClassName());
+
+                item.getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            }
+        }
+    }
+
+
+
+    String TextView       = "android.widget.TextView";
+    String RelativeLayout = "android.widget.RelativeLayout";
+    //String MatchContentYuyin = "语音问诊"
+    String MatchContentYuyin = "尝试登录";
+
+    public Boolean match(AccessibilityNodeInfo info)
+    {
+        //Tree structure class  RelativeLayout --->LinearLayout --->TextView
+        //match the content in the class TextView
+        if(info.getClassName().equals(TextView)
+                &&	info.getText().toString().indexOf(MatchContentYuyin) != -1)
+        {
+            //find the content
+            Log.v("STATE_CHANGE", "find one ");
+            return true;
+        }
+
+        return false;
+
+    }
+
+
+
+
+
+
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        Toast.makeText(this, "断开与微信绑定，停止监听", Toast.LENGTH_SHORT).show();
+        return super.onUnbind(intent);
+    }
+}
