@@ -178,7 +178,7 @@ public class RobService extends AccessibilityService {
                 if(parent != null
                         && parent.isClickable()
                         //&& (! viewSet.contains(lastInfo.getText().toString())))
-                        && !(link.contains(lastInfo.getText().toString())))
+                        && avoidToggle(lastInfo))
                 {
                     lastInfo.getParent().performAction(AccessibilityNodeInfo.ACTION_CLICK);
                     Log.v("STATE_CHANGE", "Action: " + lastInfo.getText().toString());
@@ -190,20 +190,25 @@ public class RobService extends AccessibilityService {
             }
         }
     }
-
+    public Boolean avoidToggle(AccessibilityNodeInfo info)
+    {
+        return helloworld.mySwitch.isChecked() ?   //if the switch on then filter the same message
+                !(link.contains(info.getText().toString())):true;
+    }
     String TextView       = "android.widget.TextView";
     String RelativeLayout = "android.widget.RelativeLayout";
- /*
-    String MatchContentYuyin = "语音问诊";
-    String MatchNotification = "来问丁香医生";
+
+    static String MatchContentYuyin = "语音问诊";
+    static String MatchNotification = "来问丁香医生";
     String MatchCompareContent  ="发生时间";
     String CompareContent         ;
+    /**/
+
+/*
+    static String MatchContentYuyin = "尝试登录";
+    //String MatchNotification = "潘强标";
+    static String MatchNotification = "Scott";
    */
-
-
-    String MatchContentYuyin = "尝试登录";
-    String MatchNotification = "潘强标";
-  /* */
 
 
 

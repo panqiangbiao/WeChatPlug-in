@@ -6,31 +6,125 @@
     android:layout_height="match_parent"
     tools:context=".helloworld">
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
 
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="256dp"
-        android:onClick="startService"
-        android:text="设置"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.066"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation = "vertical"
+        android:background  = "@android:color/darker_gray">
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation = "horizontal"
+            android:layout_marginTop ="2dp"
+            android:background  = "@android:color/white">
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:text="点击设置，点击页面里的“微信\n插件”，开启/关闭插件服务" />
 
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:onClick="startService"
+                android:text="设置"
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="256dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="144dp"
-        android:text="点击设置，点击页面里的“微信插件”，开启/关闭插件服务"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+                />
+        </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation = "horizontal"
+            android:layout_marginTop ="2dp"
+            android:background  = "@android:color/white">
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:text="不重复打开相同页面" />
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:text="" />
+                />
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation = "horizontal"
+            android:layout_marginTop ="2dp"
+            android:background  = "@android:color/white">
+
+            <TextView
+                android:id="@+id/textViewStr1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:layout_margin="10dp"
+                android:text="通知栏关键字：    " />
+
+            <EditText
+                android:id="@+id/editTextStr1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_gravity="right|center_vertical"
+                android:layout_margin="10dp"/>
+            />
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation = "horizontal"
+            android:layout_marginTop ="2dp"
+            android:background  = "@android:color/white">
+            <TextView
+                android:id="@+id/textViewStr2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="聊天页面关键字："
+                android:layout_gravity="left|center_vertical"
+                android:layout_margin="10dp" />
+
+            <EditText
+                android:id="@+id/editTextStr2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_gravity="right|center_vertical"
+                android:layout_margin="10dp" />
+            />
+        </LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation = "horizontal"
+            android:layout_marginTop ="2dp"
+            android:background  = "@android:color/white">
+            <Button
+                android:id="@+id/buttonModify "
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:text="修改" />
+            />
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </android.support.constraint.ConstraintLayout>
